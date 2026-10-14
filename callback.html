@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>TripHunters: connected</title>
+<style>
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 36rem; margin: 3rem auto; padding: 0 1rem; line-height: 1.6; color: #1b2a22; }
+  code, pre { background: #f0f3f1; padding: .15rem .4rem; border-radius: 4px; word-break: break-all; }
+  pre { padding: .8rem; white-space: pre-wrap; }
+  button { font: inherit; padding: .5rem 1rem; border-radius: 8px; border: 1px solid #2f4a3a; background: #2f4a3a; color: #fff; cursor: pointer; }
+  .warn { color: #7a3b00; }
+</style>
+</head>
+<body>
+<h1>TripHunters is connecting to TikTok</h1>
+<div id="ok" hidden>
+  <p>Authorization received. Copy this code and paste it into the command on your server:</p>
+  <pre id="code"></pre>
+  <p><button id="copy" type="button">Copy the code</button></p>
+  <p class="warn">Keep this code private and use it within a few minutes. It is only valid once.</p>
+</div>
+<div id="no" hidden>
+  <p>No authorization code was found in this address. Start the connection again from your server.</p>
+  <p id="why"></p>
+</div>
+<script>
+  var params = new URLSearchParams(window.location.search);
+  var code = params.get("code");
+  var error = params.get("error_description") || params.get("error");
+  if (code) {
+    document.getElementById("code").textContent = code;
+    document.getElementById("ok").hidden = false;
+    document.getElementById("copy").onclick = function () {
+      navigator.clipboard.writeText(code).then(function () { document.getElementById("copy").textContent = "Copied"; });
+    };
+    if (window.history && history.replaceState) { history.replaceState(null, "", window.location.pathname); }
+  } else {
+    document.getElementById("no").hidden = false;
+    if (error) { document.getElementById("why").textContent = "TikTok said: " + error; }
+  }
+</script>
+</body>
+</html>
