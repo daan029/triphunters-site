@@ -18,6 +18,7 @@
 <div id="ok" hidden>
   <p>Authorization received. Copy this code and paste it into the command on your server:</p>
   <pre id="code"></pre>
+  <p>State (it must match the one shown in your command): <code id="state"></code></p>
   <p><button id="copy" type="button">Copy the code</button></p>
   <p class="warn">Keep this code private and use it within a few minutes. It is only valid once.</p>
 </div>
@@ -28,9 +29,11 @@
 <script>
   var params = new URLSearchParams(window.location.search);
   var code = params.get("code");
+  var state = params.get("state");
   var error = params.get("error_description") || params.get("error");
   if (code) {
     document.getElementById("code").textContent = code;
+    document.getElementById("state").textContent = state || "(none)";
     document.getElementById("ok").hidden = false;
     document.getElementById("copy").onclick = function () {
       navigator.clipboard.writeText(code).then(function () { document.getElementById("copy").textContent = "Copied"; });
